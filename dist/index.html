@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en-AU" class="intro-active">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cafe Once Upon a Time, West Ryde (concept sample)</title>
+<meta name="description" content="An independent website concept for Cafe Once Upon a Time, a café at 8 West Parade, West Ryde, Sydney.">
+<meta name="theme-color" content="#a5282d">
+<link rel="preload" href="assets/logo-mark.png" as="image">
+<link rel="preload" href="assets/cafe-room.jpg" as="image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css?v=logo-first-2">
+<style>
+/* Critical opening styles render before the rest of the page. */
+.opening{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:#eee7d8;color:#2b2827;overflow:hidden}
+.opening[hidden]{display:none!important}
+.opening-brand{display:flex;align-items:center;flex-direction:column;gap:24px;text-align:center}
+.opening-logo{display:block;width:clamp(150px,16vw,205px);height:auto;max-height:48svh;object-fit:contain}
+.opening-caption{font:12px/1.4 "Courier New",monospace;letter-spacing:.17em;color:#a3262c}
+.opening-status{font:12px/1.5 "Courier New",monospace;letter-spacing:.06em;margin:0}
+.opening-line{width:100px;height:2px;background:#a3262c;transform-origin:left;animation:opening-line 1.7s ease-in-out infinite alternate}
+@keyframes opening-line{from{transform:scaleX(.25)}to{transform:scaleX(1)}}
+.intro-active{overflow:hidden}
+.intro-active:not(.intro-revealing) .hdr,.intro-active:not(.intro-revealing) main,.intro-active:not(.intro-revealing) .ribbon,.intro-active:not(.intro-revealing) .foot,.intro-active:not(.intro-revealing) .mobile-actions{visibility:hidden}
+.opening[data-phase="revealing"]{transform:translateY(-105%);border-radius:0 0 30% 30%;transition:transform .95s cubic-bezier(.76,0,.2,1),border-radius .95s}
+.opening[data-phase="revealing"] .opening-brand{transform:translate(7vw,-24vh) rotate(-6deg);opacity:0;transition:transform .75s cubic-bezier(.65,0,.3,1),opacity .55s}
+@media(prefers-reduced-motion:reduce){.opening-line{animation:none}.opening,.opening-brand{transition:none!important}}
+</style>
+<noscript><style>.opening{display:none!important}.intro-active{overflow:auto}.intro-active .hdr,.intro-active main,.intro-active .ribbon,.intro-active .foot,.intro-active .mobile-actions{visibility:visible!important}</style></noscript>
+</head>
+<body>
+<div class="opening" data-phase="loading" role="status" aria-label="Loading Cafe Once Upon a Time">
+  <div class="opening-brand"><img class="opening-logo" src="assets/logo-mark.png" width="775" height="1116" alt="Once upon a time" fetchpriority="high"><span class="opening-caption">WEST RYDE · SYDNEY</span><span class="opening-line" aria-hidden="true"></span><p class="opening-status">Loading the café…</p></div>
+</div>
+<script>
+(() => {
+  const root = document.documentElement;
+  const screen = document.querySelector('.opening');
+  const logo = screen.querySelector('img');
+  let timers = [];
+  let run = 0;
+  const after = (fn, ms) => timers.push(setTimeout(fn, ms));
+  window.startCafeOpening = (replay = false) => {
+    const current = ++run;
+    timers.forEach(clearTimeout);
+    timers = [];
+    screen.hidden = false;
+    screen.dataset.phase = 'loading';
+    root.classList.remove('intro-revealing');
+    root.classList.add('intro-active');
+    if (replay) scrollTo({top:0, behavior:'instant'});
+    const finish = () => {
+      if (current !== run) return;
+      timers.forEach(clearTimeout);
+      screen.hidden = true;
+      screen.dataset.phase = 'complete';
+      root.classList.remove('intro-active', 'intro-revealing');
+    };
+    const reveal = () => {
+      if (current !== run) return;
+      screen.dataset.phase = 'revealing';
+      root.classList.add('intro-revealing');
+      after(finish, matchMedia('(prefers-reduced-motion: reduce)').matches ? 30 : 1000);
+    };
+    // Start the visible hold after the logo has decoded and painted.
+    const decoded = logo.decode ? logo.decode().catch(() => {}) : Promise.resolve();
+    Promise.race([decoded, new Promise(resolve => after(resolve, 1500))]).then(() => {
+      if (current !== run || screen.hidden) return;
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (current !== run || screen.hidden) return;
+        screen.dataset.phase = 'holding';
+        after(reveal, 1800);
+      }));
+    });
+    // A failed asset or browser event must never trap a visitor on the opening.
+    after(finish, 6000);
+  };
+  window.startCafeOpening();
+  addEventListener('pageshow', event => { if (event.persisted) window.startCafeOpening(); });
+})();
+</script>
+
+<div class="progress" aria-hidden="true"></div>
+<a class="skip" href="#main">Skip to content</a>
+<div class="ribbon"><b>Concept sample.</b> An independent design idea for Cafe Once Upon a Time to review. This is not the café’s official website.</div>
+
+<header class="hdr">
+  <a class="brand" href="#top">Cafe Once Upon a Time</a>
+  <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+  <nav class="nav" id="nav" aria-label="Main">
+    <a href="#welcome">Welcome</a>
+    <a href="#story">Our story</a>
+    <a href="#drinks">Drinks</a>
+    <a href="#journal">Journal</a>
+    <a href="#visit">Visit</a>
+    <a class="cta" href="#visit">Find us</a>
+  </nav>
+</header>
+
+<main id="main">
+<section class="hero" id="top">
+  <div class="hero-copy">
+    <h1 aria-label="Once upon a time"><span class="logo" role="img" aria-label="Once upon a time"></span></h1>
+    <div>
+      <p class="eyebrow">West Ryde · Sydney</p><p class="lede"><span><i>Coffee and brunch,</i></span><span><i>on West Parade.</i></span></p>
+      <div class="hero-links">
+        <a class="btn" href="#visit">Find the café</a>
+        <a class="tlink" href="#welcome">Take a look around ↓</a>
+      </div>
+    </div>
+  </div>
+  <figure class="hero-photo" style="margin:0">
+    <div class="img" data-drift="0.12" role="img" aria-label="Inside Cafe Once Upon a Time: a brick-fronted bar with leather stools, timber shelves of antique kettles, telephones and scales, and a customer reading the paper at a corner table."></div>
+    <figcaption>Inside Cafe Once Upon a Time</figcaption>
+  </figure>
+</section>
+
+<section class="welcome" id="welcome">
+  <div class="txt"><p class="eyebrow">01 / From the café</p><h2>Pull up<br>a chair.</h2><p>A coffee at the bar. Something warm for brunch. A table in the courtyard when the sun is out.</p><p>Here’s a glimpse of what the café has been sharing.</p><p class="gallery-hint type">Select a photograph to take a closer look.</p><a class="tlink" href="#drinks">A couple of drinks to know ↓</a></div>
+  <div class="objects photo-grid">
+    <figure class="food-photo food-main"><button class="photo-open" data-photo="0" aria-label="Enlarge Egg in Fire photo"><img src="assets/egg-in-fire.jpg" alt="Egg in Fire served in a skillet with toasted bread" loading="lazy" width="720" height="900"><span class="zoom-icon" aria-hidden="true">↗</span></button><figcaption><span>Egg in Fire</span><span class="type">01</span></figcaption></figure>
+    <figure class="food-photo"><button class="photo-open" data-photo="1" aria-label="Enlarge Strawberry Matcha photo"><img src="assets/strawberry-matcha.jpg" alt="Layered Strawberry Matcha on a café table" loading="lazy" width="720" height="900"><span class="zoom-icon" aria-hidden="true">↗</span></button><figcaption><span>Strawberry Matcha</span><span class="type">02</span></figcaption></figure>
+    <figure class="food-photo"><button class="photo-open" data-photo="2" aria-label="Enlarge coffee and brunch photo"><img src="assets/coffee-and-brunch.jpg" alt="Latte art in a glass, with a sandwich and chips behind it" loading="lazy" width="720" height="900"><span class="zoom-icon" aria-hidden="true">↗</span></button><figcaption><span>Coffee &amp; brunch</span><span class="type">03</span></figcaption></figure>
+  </div>
+  <p class="photo-note type">Photographs from the café’s archived social posts. Ask the team for today’s menu.</p>
+</section>
+
+<section class="story" id="story">
+  <figure class="frame pic" style="margin:0"><div class="img" role="img" aria-label="Detail of the café’s brick bar, leather stools and timber shelving"></div><figcaption>The brick bar and leather stools</figcaption></figure>
+  <div class="body">
+    <p class="eyebrow">02 / The room</p><h2>A shelf for<br>everything.</h2>
+    <p>Old telephones, brass scales, copper kettles and biscuit tins. The shelves are as much a part of this café as the timber counter and exposed brick.</p>
+    <p>Look around while your coffee is being made. There’s a small detail waiting in almost every corner.</p>
+    <p class="slip"><b>Find your spot.</b> 8 West Parade, West Ryde. Check the café’s latest posts for opening hours and what’s happening.</p>
+    <a class="tlink" href="https://www.facebook.com/cafeonceuponatime/" target="_blank" rel="noopener">Visit the café’s Facebook page ↗</a>
+  </div>
+</section>
+
+<section class="drinks" id="drinks">
+  <div class="in">
+    <div class="lead">
+      <p class="eyebrow">03 / Coffee, with a twist</p><h2>Two drinks to ask about.</h2>
+      <p>Featured in the café’s social posts. Ask the team what’s being poured today.</p>
+    </div>
+    <ul class="drink-list">
+      <li class="drink"><h3>Once Upon a Latte</h3><p>Condensed milk and an espresso ice cube, for a sweet coffee that stays rich as the ice melts.</p></li>
+      <li class="drink"><h3>Cloud Brew</h3><p>Cold brew finished with vanilla foam: creamy on top, bold underneath.</p></li>
+    </ul>
+    <p class="tbc">For today’s selection and prices, <a href="https://www.facebook.com/cafeonceuponatime/" target="_blank" rel="noopener">check with the café ↗</a></p>
+  </div>
+</section>
+
+<section class="journal" id="journal">
+  <div class="journal-head"><div><p class="eyebrow">04 / The café journal</p><h2>More than<br>what’s in the cup.</h2></div><p>A few moments shared by the café. Meet the team, see the lighter side of a working day, and catch up with the courtyard market.</p></div>
+  <div class="journal-grid">
+    <article class="journal-item"><div class="reel-shell" data-reel="1391880306383635"><button class="reel-load" aria-label="Load the café team video"><span class="reel-number type">REEL / 01</span><span class="play-symbol" aria-hidden="true">▶</span><span class="reel-title">A day<br>with the team.</span><span class="type reel-prompt">Play café video ↗</span></button></div><div class="journal-caption"><span>Team-building, café style.</span><a href="https://www.facebook.com/reel/1391880306383635/" target="_blank" rel="noopener">Watch on Facebook ↗</a></div></article>
+    <article class="journal-item"><div class="reel-shell reel-cream" data-reel="1365633658257278"><button class="reel-load" aria-label="Load the café coffee video"><span class="reel-number type">REEL / 02</span><span class="play-symbol" aria-hidden="true">▶</span><span class="reel-title">If you know,<br>you know.</span><span class="type reel-prompt">Play café video ↗</span></button></div><div class="journal-caption"><span>A moment from the café’s feed.</span><a href="https://www.facebook.com/reel/1365633658257278/" target="_blank" rel="noopener">Watch on Facebook ↗</a></div></article>
+    <article class="journal-item market-item"><button class="photo-open market-photo" data-photo="3" aria-label="Enlarge the courtyard market poster"><img src="assets/courtyard-market.jpg" alt="Archived Once Upon a Market vendor lineup poster for 19 September" loading="lazy" width="720" height="900"><span class="zoom-icon" aria-hidden="true">↗</span></button><div class="journal-caption"><span>Once Upon a Market.</span><a href="https://www.facebook.com/cafeonceuponatime/" target="_blank" rel="noopener">Check the next market ↗</a></div><p class="archive-note type">From the September archive — not an upcoming event announcement.</p></article>
+  </div><p class="video-note type">Videos load from Facebook when selected. If a player is unavailable, use its “Watch on Facebook” link.</p>
+</section>
+
+<section class="visit" id="visit">
+  <p class="eyebrow">05 / Come by</p><h2>8 West Parade,<br>West Ryde.</h2>
+  <div class="cols">
+    <ul class="contact">
+      <li><a href="https://www.google.com/maps/dir/?api=1&destination=8%20West%20Parade%2C%20West%20Ryde%20NSW%202114" target="_blank" rel="noopener"><span class="k">Directions</span><span class="v">Open in Google Maps<small>Opens in a new tab</small></span></a></li>
+      <li><a href="tel:+61298095343"><span class="k">Phone</span><span class="v">+61 2 9809 5343</span></a></li>
+      <li><a href="mailto:cafeonceuponatime@hotmail.com"><span class="k">Email</span><span class="v">cafeonceuponatime@hotmail.com</span></a></li>
+      <li><a href="https://www.facebook.com/cafeonceuponatime/" target="_blank" rel="noopener"><span class="k">Facebook</span><span class="v">Cafe Once Upon a Time<small>Opens in a new tab</small></span></a></li>
+    </ul>
+    <aside>
+      <p class="slip"><b>Opening hours:</b> to be confirmed with the café. Please call before you travel.</p>
+      <p>Check your route in Maps for the best way to get here from where you are.</p>
+    </aside>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="row">
+    <span class="logo" role="img" aria-label="Once upon a time logo"></span>
+    <div>
+      <p><b>Concept sample.</b> Prepared independently for Cafe Once Upon a Time to review. It is not the café’s official website.</p>
+      <p>Logo and interior supplied for this concept. Additional café photographs were sourced from archived social posts via FindGlocal; videos are official Facebook embeds. Current hours, menu and prices require café confirmation.</p>
+      <button class="replay-intro" type="button">Replay the opening ↗</button>
+    </div>
+  </div>
+</footer>
+<nav class="mobile-actions" aria-label="Quick contact"><a href="tel:+61298095343">Call the café</a><a href="#visit">Get directions ↗</a></nav>
+<dialog class="lightbox" aria-labelledby="lightbox-caption"><button class="lightbox-close" aria-label="Close photo">Close ×</button><div class="lightbox-inner"><button class="photo-prev" aria-label="Previous photo">←</button><figure><img id="lightbox-image" alt=""><figcaption id="lightbox-caption"></figcaption></figure><button class="photo-next" aria-label="Next photo">→</button></div><p class="lightbox-count type" aria-live="polite"></p></dialog>
+
+<script src="script.js?v=logo-first-2" defer></script>
+</body>
+</html>
